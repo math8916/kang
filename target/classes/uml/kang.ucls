@@ -30,7 +30,7 @@
   </interface>  
   <class id="4" language="java" name="com.kang.app.member.MemberImpl" project="kang" 
     file="/kang/src/main/java/com/kang/app/member/MemberImpl.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="592" y="318"/>    
+    <position height="-1" width="-1" x="625" y="310"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <interface id="5" language="java" name="com.kang.app.member.MemberService" project="kang" 
     file="/kang/src/main/java/com/kang/app/member/MemberService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="555" y="199"/>    
+    <position height="-1" width="-1" x="627" y="136"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
