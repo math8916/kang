@@ -8,12 +8,12 @@ SELECT OBJECT_NAME FROM USER_PROCEDURES;
 @AUTHOR :math89@gmail.com
 @CREATE DATE: 2016-9-8
 @UPDATE DATE: 2016-9-8
-@DESC :전공
+@DESC :제품 및 부품리스트
 =============== item ===============
 */
---DEF_INSERT_item
+--1.DEF_INSERT_item
 CREATE OR REPLACE PROCEDURE insert_item(
-    sp_item_name 		in item.item_name%TYPE, 		
+	sp_item_name 		in item.item_name%TYPE, 		
 	sp_division 		in item.division%TYPE, 		
 	sp_defective_rate	in item.defective_rate%TYPE,	
 	sp_lead_time 		in item.lead_time%TYPE)
@@ -22,10 +22,10 @@ BEGIN
    INSERT INTO item(item_seq,item_name,division,defective_rate,lead_time) VALUES(item_seq.nextval,sp_item_name,sp_division,sp_defective_rate,sp_lead_time);
 END insert_item;
 --EXE_INSERT_item
-EXEC HANBIT.INSERT_item('ic3','PART','1','10');
+EXEC HANBIT.INSERT_item('ic4','PART','1','10');
 
 
---DEF_COUNT_item
+--2. DEF_COUNT_item
  CREATE OR REPLACE PROCEDURE count_item(
     sp_count OUT NUMBER
     ) AS
@@ -39,7 +39,7 @@ DECLARE
             count_item(sp_count);
             DBMS_OUTPUT.put_line ('수량 :'||sp_count);
     END;
---DEF_FIND_item
+--3. DEF_FIND_item
 CREATE OR REPLACE PROCEDURE find_item(
     sp_item_seq IN OUT item.item_seq%TYPE,
     sp_item_name        OUT item.item_name%TYPE, 		
@@ -75,7 +75,7 @@ CREATE OR REPLACE PROCEDURE find_item(
             find_item(sp_item_seq,sp_item_name,sp_division,sp_defective_rate,sp_lead_time,sp_result);
             DBMS_OUTPUT.put_line (sp_result);
     END;
-      -- all item
+      --4. all item
 CREATE OR REPLACE PROCEDURE all_item(
     sp_result OUT CLOB
 ) AS
@@ -113,7 +113,7 @@ exec all_item();
    
     END all_item;
     
---DEF_ALL_item(CRSOR VERSION)
+--4. DEF_ALL_item(CRSOR VERSION)
 CREATE OR REPLACE PROCEDURE HANBIT.all_item(
     item_cur OUT SYS_REFCURSOR
 ) IS
@@ -138,7 +138,7 @@ BEGIN
   END LOOP;
   CLOSE sp_cursor;
 END;
---DEF_DELETE_item --
+--5. DEF_DELETE_item --
 CREATE OR REPLACE PROCEDURE delete_item( sp_item_seq in item.item_seq%TYPE) AS
 BEGIN DELETE FROM item WHERE item_seq=sp_item_seq;END;
 BEGIN delete_item(1000);end delete_item;

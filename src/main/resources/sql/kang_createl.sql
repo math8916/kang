@@ -2,6 +2,7 @@ select * from tab;
 select * from major;
 =======CREATE=======
 DROP SEQUENCE account_seq;
+DROP SEQUENCE quotation_seq;
 DROP SEQUENCE p_order_seq;
 DROP SEQUENCE bom_seq;
 DROP SEQUENCE sr_book_seq;
@@ -9,13 +10,21 @@ DROP SEQUENCE item_seq;
 DROP SEQUENCE pro_directions_seq;
 DROP SEQUENCE inventory_seq;
 CREATE SEQUENCE account_seq START with 1000 increment by 1 nocache nocycle;
+CREATE SEQUENCE quotation_seq START with 1000 increment by 1 nocache nocycle;
 CREATE SEQUENCE p_order_seq START with 1000 increment by 1 nocache nocycle;
 CREATE SEQUENCE bom_seq START with 1000 increment by 1 nocache nocycle;
 CREATE SEQUENCE sr_book_seq START with 1000 increment by 1 nocache nocycle;
 CREATE SEQUENCE item_seq START with 1000 increment by 1 nocache nocycle;
 CREATE SEQUENCE pro_directions_seq START with 1000 increment by 1 nocache nocycle;
 CREATE SEQUENCE inventory_seq START with 1000 increment by 1 nocache nocycle;
-
+/*
+=============== Item ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :제품 및 물품명
+=============== item ===============
+*/
 DROP TABLE item CASCADE CONSTRAINT;
 CREATE TABLE item(
 	item_seq INT CONSTRAINT item_pk PRIMARY KEY,
@@ -25,6 +34,14 @@ CREATE TABLE item(
 	lead_time 		VARCHAR2(20)
 );
 insert into item(item_seq, item_name, division, defective_rate, lead_time) values(item_seq.nextval,'A','PART','5','30');
+/*
+=============== Member ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :Member
+=============== Member ===============
+*/
 DROP TABLE Member CASCADE CONSTRAINT;
 CREATE TABLE Member (
    mem_id VARCHAR2(20) CONSTRAINT member_pk PRIMARY KEY,
@@ -44,16 +61,45 @@ CREATE TABLE Member (
    CONSTRAINT major_member_fk FOREIGN KEY (major_seq) REFERENCES Major(major_seq) ON DELETE CASCADE,
    CONSTRAINT account_member_fk FOREIGN KEY (account_seq) REFERENCES account(account_seq) ON DELETE CASCADE
 );
+/*
+=============== account ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :account 거래처명 및 주소
+=============== account ===============
+*/
 DROP TABLE account CASCADE CONSTRAINT;
 CREATE TABLE account(
    account_seq INT CONSTRAINT account_pk PRIMARY KEY,
    account_name VARCHAR2(20) NOT NULL,
+   account_address VARCHAR2(200) NOT NULL
+);
+/*
+=============== quotation ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :견적서
+=============== quotation ===============
+*/
+DROP TABLE quotation CASCADE CONSTRAINT;
+CREATE TABLE quotation(
+   quotation_seq INT CONSTRAINT quotation_pk PRIMARY KEY,
    unit_price INT NOT NULL,
    Delivery INT NOT NULL,
    Doc VARCHAR2(200),
    item_seq INT NOT NULL,
-    CONSTRAINT item_account_fk FOREIGN KEY (item_seq)REFERENCES item(item_seq) on delete CASCADE
+    CONSTRAINT account_quotation_fk FOREIGN KEY (account_seq)REFERENCES account(account_seq) on delete CASCADE
 );
+/*
+=============== sr_book ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :입춣고장
+=============== sr_book ===============
+*/
 DROP TABLE sr_book CASCADE CONSTRAINT;
 CREATE TABLE sr_book(
 	sr_book_seq INT CONSTRAINT sr_book_pk PRIMARY KEY,
@@ -70,6 +116,14 @@ CREATE TABLE sr_book(
     CONSTRAINT p_order_book_fk FOREIGN KEY (p_order_seq) REFERENCES p_order(p_order_seq) on delete cascade,
     CONSTRAINT account_sr_book_fk FOREIGN KEY (account_seq) REFERENCES account(account_seq) on delete cascade
 	);
+	/*
+=============== p_order ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :발주서
+=============== p_order ===============
+*/
 DROP TABLE p_order CASCADE CONSTRAINT;
 CREATE TABLE p_order(
 	p_order_seq INT CONSTRAINT p_order_pk PRIMARY KEY,
@@ -84,8 +138,16 @@ CREATE TABLE p_order(
 	CONSTRAINT item_p_order_fk FOREIGN KEY (item_seq) REFERENCES item(item_seq) on delete cascade,
     CONSTRAINT bom_p_order_fk FOREIGN KEY (bom_seq) REFERENCES bom(bom_seq) on delete cascade,
     CONSTRAINT account_p_order_fk FOREIGN KEY (account_seq) REFERENCES account(account_seq) on delete cascade
+    CONSTRAINT quotation_p_order_fk FOREIGN KEY (quotation_seq) REFERENCES quotation(quotation_seq) on delete cascade
 );
-
+	/*
+=============== bom ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :부품리스트
+=============== bom ===============
+*/
 DROP TABLE bom CASCADE CONSTRAINT;
 CREATE TABLE bom(
 	bom_seq INT CONSTRAINT bom_pk PRIMARY KEY,
@@ -93,6 +155,14 @@ CREATE TABLE bom(
 	item_seq int,
     CONSTRAINT item_bom_fk FOREIGN KEY (item_seq) REFERENCES item(item_seq) on delete cascade
 );
+	/*
+=============== pro_directions ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :생산 지시서
+=============== pro_directions ===============
+*/
 DROP TABLE pro_directions CASCADE CONSTRAINT;
 CREATE TABLE pro_directions(
 	pro_directions_seq INT CONSTRAINT pro_directions_pk PRIMARY KEY,
@@ -103,6 +173,14 @@ CREATE TABLE pro_directions(
 	item_seq int,
     CONSTRAINT item_pro_directions_fk FOREIGN KEY (item_seq) REFERENCES item(item_seq) on delete cascade
 );
+	/*
+=============== inventory ===============
+@AUTHOR :math89@gmail.com
+@CREATE DATE: 2016-9-18
+@UPDATE DATE: 2016-9-18
+@DESC :재고현황
+=============== inventory ===============
+*/
 DROP TABLE inventory CASCADE CONSTRAINT;
 CREATE TABLE inventory(
 	inventory_seq INT CONSTRAINT inventory_pk PRIMARY KEY,

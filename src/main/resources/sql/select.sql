@@ -3,6 +3,7 @@
 select * from member;
 select * from item;
 select * from account;
+select * from quotation;
 select * from subject;
 select * from tab;
 select * from sysobjects;
